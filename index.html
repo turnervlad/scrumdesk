@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Scrum доска</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+	<div id="container" class="container">
+		<div class="columns">
+			<div class="column-header">
+				<div class="column-name">
+					<text>To Do</text>
+				</div>
+			</div>
+			<div id="tasks-list" class="tasks-list droppable">
+				<div class="task draggable">	
+					<text>такси</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+				<div class="task draggable">	
+					<text>такси</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+				<div class="task draggable">	
+					<text>такси</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+				<div class="task draggable">	
+					<text>такси</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+			</div>
+			<div class="add-new-task">
+				<input class="textInput" id="ww" type="text">
+				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i><text>     Добавить новую задачу</text>    </button>
+			</div>
+		</div>
+		<div class="columns">
+			<div class="column-header">
+				<div class="column-name">
+					<text>In Progress</text>
+				</div>
+			</div>		
+			<div class="tasks-list droppable">
+				<div class="task draggable">	
+					<text>Футбол</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+				<div class="task draggable">	
+					<text>Футбол</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+				<div class="task draggable">	
+					<text>Футбол</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+			</div>
+			<div class="add-new-task">
+				<input class="textInput" type="text">
+				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i><text> Добавить новую задачу</text></button>
+			</div>
+		</div>
+		<div class="columns">
+			<div class="column-header">
+				<div class="column-name">
+					<text>Ready for testing</text>
+				</div>
+			</div>
+			<div class="tasks-list droppable">
+				<div class="task draggable">	
+					<text>воллейбол</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+			</div>
+			<div class="add-new-task">
+				<input class="textInput" type="text">
+				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i>   <text>Добавить новую задачу</text></button>
+			</div>
+		</div>
+		<div class="columns">
+			<div class="column-header">
+				<div class="column-name">
+					<text>Done</text>
+				</div>
+			</div>
+			<div class="tasks-list droppable">
+				<div class="task draggable">	
+					<text>пожрать</text>
+					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				</div>
+			</div>
+			<div class="add-new-task">
+				<input class="textInput" type="text">
+				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i>    <text>Добавить новую задачу</text></button>
+			</div>
+		</div>		
+		<div id="column-add-new-column">
+			<button onclick="addNewColumn();" id="add-new-column">
+			<i class="fas fa-plus"></i>
+			<text>Добавить новую колонку</text>
+			</button>
+		</div>
+		
+		
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
