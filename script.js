@@ -21,17 +21,19 @@ var container = document.getElementById("container");
 
 var tasksList = document.getElementsByClassName("tasks-list");
 
-let myStorage = window.localStorage;
-
 function setItemToStore(storage) {
-  console.log(storage.columns[0]);
-  myStorage.setItem("domTree", JSON.stringify(storage));
+  window.localStorage.setItem("domTree", JSON.stringify(storage));
+}
+
+function getStore() {
+  return JSON.parse(window.localStorage.getItem("domTree"));
 }
 
 //рисуется DOM дерево из объекта storage
-const domTree = myStorage.getItem("domTree");
+// const domTree = window.localStorage.getItem("domTree");
 
-if (!domTree) {
+if (!window.localStorage.getItem("domTree")) {
+  
   const initStore = {
     columns: [
       {
@@ -55,8 +57,9 @@ if (!domTree) {
   setItemToStore(initStore);
 }
 
-if (domTree) {
+if (window.localStorage.getItem("domTree")) {
   let storage = getStore();
+  
 
   for (let i = 0; i < storage.columns.length; i++) {
     let div = document.createElement("div");
@@ -76,10 +79,6 @@ if (domTree) {
       tasksList[i].appendChild(diva);
     }
   }
-}
-
-function getStore() {
-  return JSON.parse(myStorage.getItem("domTree"));
 }
 
 const newStorageColumn = {
