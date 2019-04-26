@@ -8,53 +8,38 @@
 </head>
 <body>
 	<div id="container" class="container">
-		<div class="columns">
+		<!--<div class="columns">
 			<div class="column-header">
-				<div class="column-name">
-					<text>To Do</text>
-				</div>
+				<text class="column-name">To Do</text>
+				<a onclick="removeColumn(this)" class="remove-column" href="#"><i class="far fa-times-circle"></i></a>
 			</div>
 			<div id="tasks-list" class="tasks-list droppable">
 				<div class="task draggable">	
-					<text>такси</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					<div>
+						<text class="task-name">Прочитать "Войну и Мир"</text>
+						<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					</div>
+					<text id="date" class="Date">17.04.2019 11:00</text>
 				</div>
-				<div class="task draggable">	
-					<text>такси</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
-				</div>
-				<div class="task draggable">	
-					<text>такси</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
-				</div>
-				<div class="task draggable">	
-					<text>такси</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
-				</div>
+
 			</div>
 			<div class="add-new-task">
-				<input class="textInput" id="ww" type="text">
+				<input type="text">
 				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i><text>     Добавить новую задачу</text>    </button>
 			</div>
 		</div>
 		<div class="columns">
 			<div class="column-header">
-				<div class="column-name">
-					<text>In Progress</text>
-				</div>
+				<text class="column-name">In Progress</text>
+				<a onclick="removeColumn(this)" class="remove-column" href="#"><i class="far fa-times-circle"></i></a>
 			</div>		
 			<div class="tasks-list droppable">
-				<div class="task draggable">	
-					<text>Футбол</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
-				</div>
-				<div class="task draggable">	
-					<text>Футбол</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
-				</div>
-				<div class="task draggable">	
-					<text>Футбол</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+				<div class="task draggable">
+					<div>
+						<text class="task-name">Слушать Баха</text>
+						<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					</div>
+					<text id="date" class="Date">17.04.2019 11:00</text>
 				</div>
 			</div>
 			<div class="add-new-task">
@@ -64,14 +49,16 @@
 		</div>
 		<div class="columns">
 			<div class="column-header">
-				<div class="column-name">
-					<text>Ready for testing</text>
-				</div>
+				<text class="column-name">Ready for testing</text>
+				<a onclick="removeColumn(this)" class="remove-column" href="#"><i class="far fa-times-circle"></i></a>
 			</div>
 			<div class="tasks-list droppable">
 				<div class="task draggable">	
-					<text>воллейбол</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					<div>
+						<text class="task-name">Наслаждаться жизнью</text>
+						<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					</div>
+					<text id="date" class="Date">17.04.2019 11:00</text>	
 				</div>
 			</div>
 			<div class="add-new-task">
@@ -81,21 +68,23 @@
 		</div>
 		<div class="columns">
 			<div class="column-header">
-				<div class="column-name">
-					<text>Done</text>
-				</div>
+				<text class="column-name">Done</text>
+				<a onclick="removeColumn(this)" class="remove-column" href="#"><i class="far fa-times-circle"></i></a>
 			</div>
 			<div class="tasks-list droppable">
 				<div class="task draggable">	
-					<text>пожрать</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					<div>
+						<text class="task-name">Поджечь собор</text>
+						<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+					</div>
+					<text id="date" class="Date">17.04.2019 11:00</text>
 				</div>
 			</div>
 			<div class="add-new-task">
 				<input class="textInput" type="text">
 				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i>    <text>Добавить новую задачу</text></button>
 			</div>
-		</div>		
+		</div>	-->	
 		<div id="column-add-new-column">
 			<button onclick="addNewColumn();" id="add-new-column">
 			<i class="fas fa-plus"></i>

@@ -1,58 +1,170 @@
 const createNewColumn = name => `<div class="column-header">
-				<div class="column-name">
-					${name}
-				</div>
+				<text class="column-name">${name}</text>
 				<a onclick="removeColumn(this)" class="remove-column" href="#"><i class="far fa-times-circle"></i></a>
 			</div>
 			<div class="tasks-list droppable">
-				<div class="task draggable">	
-					<text>пожрать</text>
-					<a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
-				</div>
+				
 			</div>
 			<div class="add-new-task">
 				<input type="text">
 				<button onclick="addNewTask(this)" class="button-new-task"><i class="far fa-calendar-plus"></i>    Добавить новую задачу</button>
 			</div>`;
 
-const getNewTask = name =>
-  `<text>${name}</text><a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>`;
+const getNewTask = (name, date) =>
+  `<div>
+            <text class="task-name">${name}</text>
+            <a onclick="removeTask(this)" href="#"><i class="fas fa-trash-alt"></i></a>
+          </div>
+          <text id="date" class="Date">${date}</text>`;
 
 var container = document.getElementById("container");
 
+var tasksList = document.getElementsByClassName("tasks-list");
+
+let myStorage = window.localStorage;
+
+function setItemToStore(storage) {
+  console.log(storage.columns[0]);
+  myStorage.setItem("domTree", JSON.stringify(storage));
+}
+
+//рисуется DOM дерево из объекта storage
+const domTree = myStorage.getItem("domTree");
+
+if (!domTree) {
+  const initStore = {
+    columns: [
+      {
+        name: "To Do",
+        childs: [{ name: "Кушать паски", date: "08.08.14" }]
+      },
+      {
+        name: "In Progress",
+        childs: []
+      },
+      {
+        name: "Ready For Testing",
+        childs: []
+      },
+      {
+        name: "Done",
+        childs: []
+      }
+    ]
+  };
+  setItemToStore(initStore);
+}
+
+if (domTree) {
+  let storage = getStore();
+
+  for (let i = 0; i < storage.columns.length; i++) {
+    let div = document.createElement("div");
+    div.className = "columns";
+    div.innerHTML = createNewColumn(storage.columns[i].name);
+    container.insertBefore(
+      div,
+      container.children[container.children.length - 1]
+    );
+    for (let j = 0; j < storage.columns[i].childs.length; j++) {
+      let diva = document.createElement("div");
+      diva.className = "task draggable";
+      diva.innerHTML = getNewTask(
+        storage.columns[i].childs[j].name,
+        storage.columns[i].childs[j].date
+      );
+      tasksList[i].appendChild(diva);
+    }
+  }
+}
+
+function getStore() {
+  return JSON.parse(myStorage.getItem("domTree"));
+}
+
+const newStorageColumn = {
+  name: "To Do",
+  childs: []
+};
+
 function addNewColumn() {
+  let storage = getStore();
   let div = document.createElement("div");
   div.className = "columns";
-
   var newColumnName = prompt("Введите имя для новой колонки", "Планы на год");
   div.innerHTML = createNewColumn(newColumnName);
-
   container.insertBefore(
     div,
     container.children[container.children.length - 1]
   );
+  storage.columns.push(newStorageColumn);
+  storage.columns[storage.columns.length - 1].name = newColumnName;
+
+  setItemToStore(storage);
 }
 
+var columns = document.getElementsByClassName("columns");
+
 function removeColumn(iam) {
+  let storage = getStore();
+  for (let i = 0; i < columns.length; i++) {
+    if (iam.parentNode.parentNode == columns[i]) {
+      storage.columns.splice(i, 1);
+    }
+  }
+  setItemToStore(storage);
   iam.parentNode.parentNode.remove();
 }
 
 function removeTask(iam) {
-  iam.parentNode.remove();
+  let storage = getStore();
+  for (let i = 0; i < columns.length; i++) {
+    if (iam.parentNode.parentNode.parentNode.parentNode == columns[i]) {
+      let task = columns[i].getElementsByClassName("task");
+      for (let j = 0; j < task.length; j++) {
+        if (iam.parentNode.parentNode == task[j]) {
+          storage.columns[i].childs.splice(j, 1);
+          console.log(storage);
+        }
+      }
+    }
+  }
+  setItemToStore(storage);
+  iam.parentNode.parentNode.remove();
 }
 
+var now = new Date();
+var year = now.getFullYear();
+var month = "0" + (now.getMonth() + 1);
+var day = now.getDate();
+var taskDate = day + "." + month + "." + year;
+
 function addNewTask(iam) {
-  const taskName = iam.previousElementSibling.value;
+  let storage = getStore();
+  let taskName = iam.previousElementSibling.value;
   if (taskName.length < 1) {
-    alert("Собака сутулая, введи хоть один символ");
+    alert("Введите хотя бы один символ!");
     return;
   }
+
+  for (let i = 0; i < columns.length; i++) {
+    if (iam.parentNode.parentNode == columns[i]) {
+      const newStorageTask = {
+        name: taskName,
+        date: day + "." + month + "." + year
+      };
+      storage.columns[i].childs.push(newStorageTask);
+    }
+  }
+
+  setItemToStore(storage);
+
   const column = iam.parentNode.parentNode.querySelector(".tasks-list");
   let div = document.createElement("div");
-
   div.className = "task draggable";
-  div.innerHTML = getNewTask(taskName);
+  div.innerHTML = getNewTask(taskName, taskDate);
   column.appendChild(div);
+  iam.previousElementSibling.value = "";
 }
 
 function hithlightAllowedCollumns(el) {
@@ -92,11 +204,28 @@ var DragManager = (function() {
   var dragObject = {};
 
   var self = this;
+  var oldStorageColumnPosition, oldStorageTaskPosition, elemName, elemDate;
 
   function onMouseDown(event) {
     if (event.which != 1) return;
 
     var elem = event.target.closest(".draggable");
+    elemName = elem.getElementsByClassName("task-name");
+    elemDate = elem.getElementsByClassName("Date");
+    console.log(elemName[0].textContent, elemDate[0].textContent);
+
+    for (let i = 0; i < columns.length; i++) {
+      if (elem.parentNode.parentNode == columns[i]) {
+        oldStorageColumnPosition = i;
+        let task = columns[i].getElementsByClassName("task");
+        for (let j = 0; j < task.length; j++) {
+          if (elem == task[j]) {
+            oldStorageTaskPosition = j;
+          }
+        }
+      }
+    }
+
     if (!elem) return;
     dragObject.elem = elem;
     // запомним, что элемент нажат на текущих координатах pageX/pageY
@@ -110,7 +239,6 @@ var DragManager = (function() {
     if (!dragObject.elem) return; // элемент не зажат
 
     if (!dragObject.avatar) {
-      hithlightAllowedCollumns(dragObject.elem);
       // если перенос не начат...
       var moveX = event.pageX - dragObject.downX;
       var moveY = event.pageY - dragObject.downY;
@@ -119,6 +247,7 @@ var DragManager = (function() {
       if (Math.abs(moveX) < 3 && Math.abs(moveY) < 3) {
         return;
       }
+      hithlightAllowedCollumns(dragObject.elem);
 
       // начинаем перенос
       dragObject.avatar = createAvatar(event); // создать аватар
@@ -168,6 +297,7 @@ var DragManager = (function() {
 
   function createAvatar(event) {
     var avatar = dragObject.elem;
+
     var old = {
       parent: avatar.parentNode,
       nextSibling: avatar.nextSibling,
@@ -230,9 +360,27 @@ var DragManager = (function() {
   document.onmousedown = onMouseDown;
 
   this.onDragEnd = function(dragObject, dropElem) {
+    let storage = getStore();
     const taskList = dropElem.querySelector(".tasks-list");
     dragObject.avatar.removeDrugStyles();
     taskList.appendChild(dragObject.avatar);
+    console.log(oldStorageColumnPosition, oldStorageTaskPosition);
+    storage.columns[oldStorageColumnPosition].childs.splice(
+      oldStorageTaskPosition,
+      1
+    );
+
+    let tasksList = document.getElementsByClassName("tasks-list");
+    for (let i = 0; i < tasksList.length; i++) {
+      if (taskList == tasksList[i]) {
+        let dragStorageTask = {
+          name: elemName[0].textContent,
+          date: elemDate[0].textContent
+        };
+        storage.columns[i].childs.push(dragStorageTask);
+      }
+    }
+    setItemToStore(storage);
   };
 
   this.onDragCancel = function(dragObject) {
